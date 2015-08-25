@@ -1,0 +1,15 @@
+{
+  "name": "paths-manager",
+  "version": "0.0.2",
+  "repository": "https://github.com/crivas/path-manager",
+  "description": "a utility module for getting paths",
+  "main": "index.js",
+  "author": "Chester Rivas",
+  "license": "MIT",
+  "dependencies": {
+    "through2": "^0.6.3",
+    "gulp-util": "^3.0.6",
+    "jsonfile": "^2.2.1",
+    "underscore-node": "^0.1.2"
+  }
+}
