@@ -1,5 +1,5 @@
 {
-  "name": "paths-manager",
+  "name": "path-manager",
   "version": "0.0.2",
   "repository": "https://github.com/crivas/path-manager",
   "description": "a utility module for getting paths",
