@@ -1,9 +1,8 @@
 Path Manager
 ====================
+![path-manager build status](https://travis-ci.org/crivas/path-manager.svg?branch=master)
 
 > Instantiable class with one parameter which is the path to a config json file. Has methods that return an array js, scss, css, and views paths to be used at the beginning of gulp or grunt task
-
-![path-manager build status](https://travis-ci.org/crivas/path-manager.svg?branch=master)
 
 ```js
 var plugins = require('gulp-load-plugins')(),
