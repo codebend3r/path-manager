@@ -3,6 +3,8 @@ Path Manager
 
 > Instantiable class with one parameter which is the path to a config json file. Has methods that return an array js, scss, css, and views paths to be used at the beginning of gulp or grunt task
 
+![path-manager build status](https://travis-ci.org/crivas/path-manager.svg?branch=master)
+
 ```js
 var plugins = require('gulp-load-plugins')(),
 
@@ -11,9 +13,13 @@ var pathsObj = new PathManager('./config.json');
 // get js path
 var jsPath = pathsObj.getJSPaths();
 
-return gulp.src(jsPath)
-	.pipe(plugins.ngAnnotate())
-	.pipe(plugins.uglify())
-	.pipe(gulp.dest('dist/js'))
+gulp.task('js', function () {
+
+	return gulp.src(jsPath)
+		.pipe(plugins.ngAnnotate())
+		.pipe(plugins.uglify())
+		.pipe(gulp.dest('dist/js'))
+
+});
 
 ```
