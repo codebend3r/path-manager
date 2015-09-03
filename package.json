@@ -1,6 +1,6 @@
 {
   "name": "path-manager",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/crivas/path-manager",
   "description": "a utility module for getting paths",
   "main": "index.js",
