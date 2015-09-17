@@ -1,7 +1,7 @@
 /**
- * Updated by crivas on 09/02/2015
+ * Updated by crivas on 09/17/2015
  * Email: chester.rivas@gmail.com
- * Plugin Name: PathManager
+ * Plugin Name: path-manager
  */
 
 'use strict';
@@ -15,17 +15,17 @@ var jsonfile = require('jsonfile'),
 /**
  * utility for get the js, scss, and views paths
  */
-var PathManager = function (uteJson) {
+var PathManager = function (configJson) {
 
   var self = this;
 
-  if (_.isUndefined(uteJson)) {
-    this.packages = jsonfile.readFileSync('./ute-package.json');
+  if (_.isUndefined(configJson)) {
+    throw new Error('did not specify a config json file as he first parameter');
   } else {
-    if (typeof uteJson === 'string') {
-      this.packages = jsonfile.readFileSync(uteJson);
-    } else if (typeof uteJson === 'object') {
-      this.packages = uteJson;
+    if (typeof configJson === 'string') {
+      this.packages = jsonfile.readFileSync(configJson);
+    } else if (typeof configJson === 'object') {
+      this.packages = configJson;
     }
   }
 
@@ -38,13 +38,13 @@ var PathManager = function (uteJson) {
 /**
  * loops through all packages and maps to self.packages
  */
-PathManager.prototype.createMap = function (utePackages) {
+PathManager.prototype.createMap = function (configJson) {
 
   var self = this;
 
-  utePackages = typeof utePackages !== 'undefined' && utePackages || self.packages.components || [];
+  configJson = typeof configJson !== 'undefined' && configJson || self.packages.components || [];
 
-  self.mapPackages = _.map(utePackages.components, function (moduleObj, key) {
+  self.mapPackages = _.map(configJson.components, function (moduleObj, key) {
 
     if (moduleObj) {
       return {
@@ -55,13 +55,6 @@ PathManager.prototype.createMap = function (utePackages) {
         scssBrand: 'app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
         views: 'app/views/' + key + '/**/*.html'
       };
-    } else {
-      // return {
-      //   js: '!app/js/' + key + '/**/*.js',
-      //   scss: '!app/scss/' + key + '/**/*.scss',
-      //   scssBrand: '!app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
-      //   views: '!app/views/' + key + '/**/*.html'
-      // };
     }
 
   });

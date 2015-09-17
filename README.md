@@ -6,6 +6,7 @@ Path Manager
 
 ```js
 var plugins = require('gulp-load-plugins')(),
+var PathManager = require('path-manager');
 
 // instantiate with a config.json as only parameter
 var pathsObj = new PathManager('./config.json');
