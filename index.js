@@ -8,6 +8,8 @@
 
 var jsonfile = require('jsonfile'),
   fs = require('fs'),
+  flatten = require('array-flatten'),
+  unique = require('array-unique'),
   _ = require('underscore-node');
 
 /**
@@ -17,7 +19,9 @@ var PathManager = function (uteJson) {
 
   var self = this;
 
-  if (!_.isUndefined(uteJson)) {
+  if (_.isUndefined(uteJson)) {
+    this.packages = jsonfile.readFileSync('./ute-package.json');
+  } else {
     if (typeof uteJson === 'string') {
       this.packages = jsonfile.readFileSync(uteJson);
     } else if (typeof uteJson === 'object') {
@@ -45,18 +49,19 @@ PathManager.prototype.createMap = function (utePackages) {
     if (moduleObj) {
       return {
         js: 'app/js/' + key + '/**/*.js',
-        jsFolder: 'app/js/' + key,
+        vendorJs: moduleObj.otherJsFiles,
+        jsFolder: 'app/js/' + key + '/**/*.js',
         scss: 'app/scss/' + key + '/**/*.scss',
         scssBrand: 'app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
         views: 'app/views/' + key + '/**/*.html'
       };
     } else {
-      return {
-        js: '!app/js/' + key + '/**/*.js',
-        scss: '!app/scss/' + key + '/**/*.scss',
-        scssBrand: '!app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
-        views: '!app/views/' + key + '/**/*.html'
-      };
+      // return {
+      //   js: '!app/js/' + key + '/**/*.js',
+      //   scss: '!app/scss/' + key + '/**/*.scss',
+      //   scssBrand: '!app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
+      //   views: '!app/views/' + key + '/**/*.html'
+      // };
     }
 
   });
@@ -70,11 +75,36 @@ PathManager.prototype.createMap = function (utePackages) {
  */
 PathManager.prototype.getSCSSPaths = function () {
 
-  return _.map(this.mapPackages, function (mapObj) {
+  var scssPaths = _.chain(this.mapPackages)
+    .flatten(true)
+    .filter(function (mapObj) {
+      return !_.isUndefined(mapObj.scss) && mapObj.scss !== '';
+    })
+    .map(function (mapObj) {
+      return mapObj.scss;
+    })
+    .value();
 
-    return mapObj.scss;
+    return unique(scssPaths);
 
-  });
+};
+
+/**
+ * returns array vendor paths
+ */
+PathManager.prototype.getVendorPaths = function () {
+
+  var vendorJsArray = _.chain(this.mapPackages)
+    .flatten(true)
+    .filter(function (mapObj) {
+      return !_.isUndefined(mapObj.vendorJs) && mapObj.vendorJs !== '';
+    })
+    .map(function (mapObj) {
+      return mapObj.vendorJs;
+    })
+    .value();
+
+  return unique(vendorJsArray);
 
 };
 
@@ -83,11 +113,17 @@ PathManager.prototype.getSCSSPaths = function () {
  */
 PathManager.prototype.getSCSSBrandPaths = function () {
 
-  return _.map(this.mapPackages, function (mapObj) {
+  var scssPaths = _.chain(this.mapPackages)
+    .flatten(true)
+    .filter(function (mapObj) {
+      return !_.isUndefined(mapObj.scssBrand) && mapObj.scssBrand !== '';
+    })
+    .map(function (mapObj) {
+      return mapObj.scssBrand;
+    })
+    .value();
 
-    return mapObj.scssBrand;
-
-  });
+    return unique(scssPaths);
 
 };
 
@@ -96,11 +132,17 @@ PathManager.prototype.getSCSSBrandPaths = function () {
  */
 PathManager.prototype.getViewsPaths = function () {
 
-  return _.map(this.mapPackages, function (mapObj) {
+  var viewsPath = _.chain(this.mapPackages)
+    .flatten(true)
+    .filter(function (mapObj) {
+      return !_.isUndefined(mapObj.views) && mapObj.views !== '';
+    })
+    .map(function (mapObj) {
+      return mapObj.views;
+    })
+    .value();
 
-    return mapObj.views;
-
-  });
+    return unique(viewsPath);
 
 };
 
@@ -109,11 +151,17 @@ PathManager.prototype.getViewsPaths = function () {
  */
 PathManager.prototype.getJSPaths = function () {
 
-  return _.map(this.mapPackages, function (mapObj) {
+  var jsPaths = _.chain(this.mapPackages)
+    .flatten(true)
+    .filter(function (mapObj) {
+      return !_.isUndefined(mapObj.js) && mapObj.js !== '';
+    })
+    .map(function (mapObj) {
+      return mapObj.js;
+    })
+    .value();
 
-    return mapObj.js;
-
-  });
+    return unique(jsPaths);
 
 };
 
@@ -121,26 +169,7 @@ PathManager.prototype.getJSPaths = function () {
  * returns array of templates
  */
 PathManager.prototype.getTemplatePath = function () {
-
-    return ['app/js/cache/**/*.js'];
-
-  };
-
-/**
- * returns an object of parsed items within a folder
- */
-// PathManager.prototype.getJSSource = function () {
-//
-//   this.jsFolders = this.mapPackages
-//     .filter(function (mapObj) {
-//       return mapObj.jsFolder;
-//     })
-//     .map(function (mapObj) {
-//       return includeFolder(mapObj.jsFolder);
-//     });
-//
-//   return this.jsFolders;
-//
-// };
+  return ['app/js/cache/**/*.js'];
+};
 
 module.exports = PathManager;
