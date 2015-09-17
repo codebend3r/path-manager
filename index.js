@@ -46,14 +46,16 @@ PathManager.prototype.createMap = function (configJson) {
   self.mapPackages = _.map(configJson.components, function (moduleObj, key) {
 
     if (moduleObj) {
-      return {
-        js: 'app/js/' + key + '/**/*.js',
-        vendorJs: moduleObj.otherJsFiles,
-        jsFolder: 'app/js/' + key + '/**/*.js',
-        scss: 'app/scss/' + key + '/**/*.scss',
-        scssBrand: 'app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss',
-        views: 'app/views/' + key + '/**/*.html'
-      };
+      var mappedComponent = {};
+      mappedComponent.js = 'app/js/' + key + '/**/*.js';
+      mappedComponent.vendorJs = moduleObj.otherJsFiles;
+      mappedComponent.jsFolder = 'app/js/' + key + '/**/*.js';
+      if (!_.isUndefined(moduleObj.scssUrl)) {
+        mappedComponent.scss = 'app/scss/' + key + '/**/*.scss';
+        mappedComponent.scssBrand = 'app/scss/brand/' + self.packages.selectedBrand.toLowerCase() + '/' + key + '/**/*.scss';
+      }
+      mappedComponent.views = 'app/views/' + key + '/**/*.html';
+      return mappedComponent;
     }
 
   });
