@@ -8,7 +8,6 @@
 
 var jsonfile = require('jsonfile'),
   fs = require('fs'),
-  flatten = require('array-flatten'),
   unique = require('array-unique'),
   _ = require('underscore-node');
 

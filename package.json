@@ -1,6 +1,6 @@
 {
   "name": "path-manager",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": "https://github.com/crivas/path-manager",
   "description": "a utility module for getting paths",
   "main": "index.js",
@@ -10,10 +10,7 @@
     "through2": "^0.6.3",
     "gulp-util": "^3.0.6",
     "jsonfile": "^2.2.1",
-    "underscore-node": "^0.1.2"
-  },
-  "devDependencies": {
-    "array-flatten": "^1.1.1",
+    "underscore-node": "^0.1.2",
     "array-unique": "^0.2.1"
   }
 }
